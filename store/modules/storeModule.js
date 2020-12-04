@@ -23,10 +23,12 @@ export const storeModule = ({
     actions: {
       async fetchStoreInfo({rootState,commit}){
          try{
+            commit('app/setSkeletonLoader',true,{root:true})
             const {adminInfo}=rootState.admin
             const result=await firestore.collection('stores').doc(adminInfo.storeId).get()
             const info=result.data()
             commit('setStoreInfo',info)
+            commit('app/setSkeletonLoader',false,{root:true})
          }catch(error){
              console.log(error)
          }

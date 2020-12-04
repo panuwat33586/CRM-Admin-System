@@ -1,26 +1,34 @@
 <template>
   <v-app>
-    <v-app-bar 
-    color="deep-purple accent-4" 
-    dark
-    app
-    > 
-     <v-toolbar-title>NiceDining</v-toolbar-title>
+    <v-app-bar color="deep-purple accent-4" dark app>
+      <v-toolbar-title> CRM Admin System</v-toolbar-title>
     </v-app-bar>
     <v-main>
-      <v-container 
-      fluid 
-      fill-height
-      
-      >
-        <nuxt />
+      <v-container fluid fill-height>
+        <v-layout 
+        align-content-space-between
+        column>
+          <v-flex 
+          align-self-end>
+            <AlertBox />
+          </v-flex>
+          <v-flex
+          align-self-center
+          >
+              <nuxt/>
+          </v-flex>
+         </v-layout>
       </v-container>
     </v-main>
   </v-app>
 </template>
 
 <script>
+import AlertBox from '@/components/AlertBox'
 export default {
+  components: {
+    AlertBox,
+  },
   data() {
     return {
       clipped: false,

@@ -1,7 +1,12 @@
 <template>
   <v-app>
-    <v-app-bar color="deep-purple accent-4" dark app>
-      <v-toolbar-title>NiceDining</v-toolbar-title>
+    <v-app-bar 
+    :color="store.storeInfo?store.storeInfo.setting.bannerColor:'#FFCC80'" 
+    dark 
+    app>
+      <v-toolbar-title>{{store.storeInfo?store.storeInfo.name:null}}</v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn  @click="signout" text>Signout</v-btn>
     </v-app-bar>
     <v-main>
       <v-container fluid fill-height>
@@ -11,6 +16,7 @@
             <SideMenu/>
           </v-col>
           <v-col cols="9">
+            <AlertBox/>
             <nuxt />
           </v-col>
         </v-row>
@@ -22,12 +28,24 @@
 </template>
 
 <script>
+import {mapState} from 'vuex'
+import AlertBox from '@/components/AlertBox'
 import LoadingScreen from '@/components/app/LoadingScreen'
 import SideMenu from '@/components/app/SideMenu'
 export default {
   components: {
     SideMenu,
-    LoadingScreen
+    LoadingScreen,
+    AlertBox
   },
+  computed:{
+    ...mapState(['store'])
+  },
+  methods:{
+    signout(){
+      this.$router.push({path:'/'})
+      this.$store.commit('admin/clearAdminInfo')
+    }
+  }
 }
 </script>

@@ -20,6 +20,10 @@
           <v-tab-item
           >
         <v-list three-line>
+          <v-skeleton-loader
+          type="list-item-avatar-three-line"
+          :loading="skeletonLoader"
+          >
           <template v-for="(member, $memberIndex) in members.memberList">
             <Member 
             :member="member" 
@@ -28,6 +32,7 @@
             />
             <v-divider :key="'divider' + $memberIndex" />
           </template>
+          </v-skeleton-loader>
         </v-list>
         </v-tab-item>
         <v-tab-item
@@ -54,7 +59,7 @@ export default {
     Member,
     Searchbar,
     MemberPersonalInfo,
-    MemberVoucherInfo
+    MemberVoucherInfo,
   },
   data(){
      return {
@@ -67,7 +72,10 @@ export default {
      }
   },
   computed: {
-    ...mapState(['members']),
+    ...mapState({
+      skeletonLoader:(state)=>state.app.skeletonLoader,
+      members:(state)=>state.members
+      }),
   },
   beforeMount() {
     this.$store.dispatch('members/fetchMemberList')
@@ -81,7 +89,7 @@ export default {
        this.$store.dispatch('members/searchMember',payload)
        this.selectMember=null
        this.tab=0
-    }
+    },
   }
 }
 </script>

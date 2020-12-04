@@ -23,7 +23,7 @@
           dense
           v-model="searchWord"
           :disabled="selectedSearchCondition?false:true"
-          placeholder="search"
+           placeholder="search"
           />
          </v-input>
       </v-col>

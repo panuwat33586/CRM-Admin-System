@@ -1,5 +1,8 @@
 <template>
-  <v-dialog :value="isOpen" @input="closeModal">
+  <v-dialog 
+  width="700px"
+  :value="isOpen" 
+  @input="closeModal">
     <v-card @click:outside="closeModal">
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation>

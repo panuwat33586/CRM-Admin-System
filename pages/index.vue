@@ -1,11 +1,7 @@
 <template>
-  <v-layout
-  fill-height
-  align-center
-  justify-center
-  >
+  <div>
    <LoginForm/>
-  </v-layout>
+  </div>
 </template>
 
 <script>

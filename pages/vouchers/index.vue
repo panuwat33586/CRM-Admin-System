@@ -17,11 +17,16 @@
                 </v-toolbar>
                <v-card-text>
               <v-list three-line>
+                <v-skeleton-loader
+                type='list-item-avatar-three-line'
+                :loading="app.skeletonLoader"
+                >
                 <template 
                 v-for="(voucher,$voucherIndex) in vouchers.storeVoucherList">
                    <VoucherListItem :voucher="voucher" :key="$voucherIndex"/>
                   <v-divider :key="'divider'+ $voucherIndex" />
                 </template>
+                </v-skeleton-loader>
               </v-list>
               </v-card-text>
               </v-card>
@@ -52,7 +57,7 @@ export default {
       this.$store.dispatch('vouchers/fetchStoreVoucherList')
   },
   computed:{
-     ...mapState(['vouchers'])
+     ...mapState(['app','vouchers'])
   },
   methods:{
     triggerModal(){

@@ -4,24 +4,48 @@ import { firestore } from '~/firebaseInstance'
 export const vouchersModule = ({
   namespaced: true,
   state: {
-    storeVoucherList: []
+    storeVoucherList: [],
+    membersVoucherList:[]
   },
   mutations: {
     setStoreVoucherList(state, list) {
       state.storeVoucherList = list
+    },
+    setMembersVoucherList(state,list){
+      state.membersVoucherList=list
     }
+  },
+  getters:{
+       filteredMembersVoucherList:(state)=>(type)=>{
+        return state.membersVoucherList.sort((a,b)=>{
+         return  a[type]>b[type]?-1:1
+        })
+  }
   },
   actions: {
     async fetchStoreVoucherList({ rootState, commit }) {
       try {
+        commit('app/setSkeletonLoader',true,{root:true})
         const { adminInfo } = rootState.admin
         const { docs } = await firestore.collection('storeVouchers')
           .where('storeId', '==', adminInfo.storeId).get()
         const list = docs.map(doc => doc.data())
         commit('setStoreVoucherList', list)
+        commit('app/setSkeletonLoader',false,{root:true})
       } catch (error) {
         console.log(error)
       }
+    },
+    async fetchMembersVoucherList({rootState,commit}){
+        try{
+          const { adminInfo } = rootState.admin
+          const { docs } = await firestore.collection('memberVouchers')
+          .where('storeId', '==', adminInfo.storeId).get()
+          const list=docs.map(doc=>doc.data())
+          commit('setMembersVoucherList', list)
+        }catch(error){
+          console.log(error)
+        }
     },
     createStoreVoucher({ rootState, dispatch, commit }, voucherInfo) {
       const promise = new Promise(async (resolve, reject) => {
@@ -41,6 +65,14 @@ export const vouchersModule = ({
             .set(newVoucher)
           dispatch('fetchStoreVoucherList')
           commit('app/setLoading', false, { root: true })
+          commit('app/setNotification',
+          {
+            status:true,
+            type:'success',
+            message:'successfully create voucher'
+          },
+          {root:true}
+          )
           resolve()
         } catch (error) {
           commit('app/setLoading', false, { root: true })
@@ -82,6 +114,14 @@ export const vouchersModule = ({
           .delete()
         dispatch('fetchStoreVoucherList')
         commit('app/setLoading', false, { root: true })
+        commit('app/setNotification',
+        {
+          status:true,
+          type:'success',
+          message:'successfully delete voucher'
+        },
+        {root:true}
+        )
       } catch (error) {
         commit('app/setLoading', false, { root: true })
         console.log(error)

@@ -1,5 +1,5 @@
 <template>
-  <v-dialog :value="isOpen" @input="closeModal">
+  <v-dialog width="700px" :value="isOpen" @input="closeModal">
     <v-card @click:outside="closeModal">
       <v-card-title class="headline grey lighten-2"> New Voucher </v-card-title>
       <v-card-text>
@@ -10,15 +10,17 @@
                 label="name"
                 v-model="voucher.name"
                 outlined
+                dense
                 :rules="fieldRules"
                 required
               />
             </v-col>
             <v-col cols="6">
               <v-text-field
-                label="points"
+                label=" Exchange points"
                 v-model="voucher.points"
                 outlined
+                dense
                 type="number"
                 :rules="numberRules"
                 required
@@ -29,6 +31,7 @@
                 label="value"
                 v-model="voucher.value"
                 outlined
+                dense
                 type="number"
                 :rules="numberRules"
                 required
@@ -39,6 +42,7 @@
                 label="description"
                 v-model="voucher.description"
                 outlined
+                dense
                 :rules="fieldRules"
                 required
               />
@@ -94,14 +98,14 @@ export default {
     closeModal() {
       this.$emit('onCloseModal')
     },
-    async saveEditStoreVoucher(){
-           try{
-              await this.$store.dispatch('vouchers/editStoreVoucher',this.voucher)
-              this.closeModal()
-           }catch(error){
-               return 
-           }
-    }
+    async saveEditStoreVoucher() {
+      try {
+        await this.$store.dispatch('vouchers/editStoreVoucher', this.voucher)
+        this.closeModal()
+      } catch (error) {
+        return
+      }
+    },
   },
 }
 </script>

@@ -26,6 +26,10 @@ export const adminModule=({
                 resolve('login success')
               } catch (err) {
                 console.log(err)
+                commit('app/setNotification',
+                {status:true,type:'error',message:'an error occured'}
+                ,{root:true}
+                )
                 reject('fail to login')
               }
             })

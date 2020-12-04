@@ -5,6 +5,7 @@ export const membersModule = ({
     memberList: [],
     selectedMember: null,
     selectedMemberVoucherList: [],
+    docs:null
   },
   mutations: {
     setMemberList(state, list) {
@@ -16,10 +17,21 @@ export const membersModule = ({
     setSelectedMemberVoucherList(state, list) {
       state.selectedMemberVoucherList = list
     },
+    setDocs(state,docs){
+      state.docs=docs
+    }
+  },
+  getters:{
+       filterMemberList:(state)=>(type)=>{
+             return state.memberList.sort((a,b)=>{
+              return  a[type]>b[type]?-1:1
+             })
+       }
   },
   actions: {
     async fetchMemberList({ rootState, commit }) {
       try {
+        commit('app/setSkeletonLoader',true,{root:true})
         const { adminInfo } = rootState.admin
         const { docs } = await firestore.collection('members')
           .orderBy('createAt','desc')
@@ -28,10 +40,46 @@ export const membersModule = ({
           .get()
         const list = docs.map(doc => doc.data())
         commit('setMemberList', list)
+        commit('setDocs',docs)
+        commit('app/setSkeletonLoader',false,{root:true})
       } catch (error) {
         console.log(error)
       }
     },
+    async fetchNextMemberList({rootState,state,commit}){
+       try{
+        const { adminInfo } = rootState.admin
+        const lastDoc=state.docs[state.docs.length-1] 
+        const { docs } = await firestore.collection('members')
+        .where('storeId', '==', adminInfo.storeId)
+        .orderBy('createAt','desc')
+        .startAfter(lastDoc)
+        .limit(20)
+        .get()
+        const list = docs.map(doc => doc.data())
+        commit('setMemberList', list)
+        commit('setDocs',docs)
+       }catch(error){
+           console.log(error)
+       }
+    },
+    async fetchPrevMemberList({rootState,state,commit}){
+      try{
+       const { adminInfo } = rootState.admin
+       const lastDoc=state.docs[0] 
+       const { docs } = await firestore.collection('members')
+       .where('storeId', '==', adminInfo.storeId)
+       .orderBy('createAt','desc')
+       .endBefore(lastDoc)
+       .limit(20)
+       .get()
+       const list = docs.map(doc => doc.data())
+       commit('setMemberList', list)
+       commit('setDocs',docs)
+      }catch(error){
+          console.log(error)
+      }
+   },
     async fetchSelectedMemberInfo({ dispatch,commit }, member) {
       try {
         const { storeId, memberId } = member

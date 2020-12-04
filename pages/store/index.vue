@@ -4,12 +4,10 @@
     <v-card-text>
       <v-row>
         <v-col cols="12">
-          <StoreDetail :storeInfo="store.storeInfo" :loading="loading" />
+          <StoreDetail :storeInfo="store.storeInfo"/>
         </v-col>
         <v-col cols="12">
-          <v-card
-          :loading="loading"
-          >
+          <v-card >
             <v-card-title> NEWS </v-card-title>
             <v-card-text>
               <v-toolbar color="indigo">
@@ -17,8 +15,8 @@
               </v-toolbar>
               <v-list three-line>
                 <template v-for="(news, $newsIndex) in store.newsList">
-                  <NewsListItem :news="news" :key="'news' + $newsIndex" />
-                  <v-divider :key="'news divider' + $newsIndex" />
+                    <NewsListItem :news="news" :key="'news' + $newsIndex" />
+                    <v-divider :key="'news divider' + $newsIndex" />
                 </template>
               </v-list>
             </v-card-text>
@@ -50,14 +48,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(['store']),
-    loading(){
-      if(this.store.storeInfo&&this.store.newsList){
-        return false
-      }else{
-        return true
-      }
-    }
+    ...mapState(['app','store'])
   },
   created() {
     this.$store.dispatch('store/fetchStoreInfo')

@@ -44,6 +44,9 @@ export default {
         TransactionsReport,
         VouchersReport
     },
+    created(){
+       this.$store.dispatch('members/fetchMemberList')
+    },
     data(){
         return{
             tab:null

@@ -9,23 +9,26 @@
 
       <v-divider></v-divider>
 
-      <v-list 
-      v-for="(menu, $menuIndex) in menus" 
-      :key="$menuIndex"
-      dense 
-      nav>
-        <v-list-item 
-        @click="goToPage(menu.page)"
+      <v-list dense nav>
+        <v-list-item-group
         color="primary"
+        v-model="selectedMenu"
+        >
+        <v-list-item
+          v-for="(menu, $menuIndex) in menus"
+          :key="$menuIndex"
+          @click="goToPage(menu.page)"
+          color="primary"
         >
           <v-list-item-icon>
-            <v-icon>{{menu.icon}}</v-icon>
+            <v-icon>{{ menu.icon }}</v-icon>
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>{{menu.title}}</v-list-item-title>
+            <v-list-item-title>{{ menu.title }}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+        </v-list-item-group>
       </v-list>
     </v-navigation-drawer>
   </v-card>
@@ -36,19 +39,33 @@ export default {
   data() {
     return {
       menus: [
-        { icon: 'mdi-storefront', title: 'Store',page:'store'},
-        { icon: 'mdi-account-group', title: 'Members',page:'members' },
-        { icon: 'mdi-cash-multiple', title: 'Transactions',page:'transactions' },
-        { icon: 'mdi-ticket-percent', title: 'Vouchers',page:'vouchers' },
-         { icon: 'mdi-file-document-outline', title: 'Reports',page:'reports' },
+        { icon: 'mdi-storefront', title: 'Store', page: 'store' },
+        { icon: 'mdi-account-group', title: 'Members', page: 'members' },
+        {
+          icon: 'mdi-cash-multiple',
+          title: 'Transactions',
+          page: 'transactions',
+        },
+        { icon: 'mdi-ticket-percent', title: 'Vouchers', page: 'vouchers' },
+        {
+          icon: 'mdi-file-document-outline',
+          title: 'Reports',
+          page: 'reports',
+        },
       ],
+      selectedMenu:0
     }
   },
-  methods:{
-      goToPage(page){
-         this.$router.push({name:page})
-      }
-  }
+  mounted(){
+      this.selectedMenu=this.menus.findIndex(
+        menu=>menu.page==this.$route.name
+        )
+  },
+  methods: {
+    goToPage(page) {
+      this.$router.push({ name: page })
+    },
+  },
 }
 </script>
 

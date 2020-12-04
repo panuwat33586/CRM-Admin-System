@@ -2,11 +2,30 @@
 export const appModule=({
     namespaced:true,
     state:{
-        loading:false
+        loading:false,
+        skeletonLoader:false,
+        notification:{
+            status:false,
+            type:null,
+            message:null
+        }
     },
     mutations:{
         setLoading(state,status){
             state.loading=status
+        },
+        setSkeletonLoader(state,status){
+            state.skeletonLoader=status
+        },
+        setNotification(state,notification){
+            state.notification=notification
+            setTimeout(()=>{
+                state.notification={
+                    status:false,
+                    type:null,
+                    message:null
+                }
+            },2000)
         }
     }
 })

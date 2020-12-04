@@ -16,7 +16,7 @@
             </v-col>
             <v-col cols="6">
               <v-text-field
-                label="points"
+                label="Exchange points"
                 v-model="voucher.points"
                 outlined
                 type="number"
@@ -41,6 +41,17 @@
                 outlined
                 :rules="fieldRules"
                 required
+              />
+            </v-col>
+            <v-col cols="6">
+              <DatePicker
+              :date.sync="endDate"
+              />
+            </v-col>
+            <v-col cols="6">
+              <TimePicker 
+              :rules="fieldRules"
+              :time.sync="endTime"
               />
             </v-col>
           </v-row>
@@ -70,9 +81,14 @@
 
 <script>
 import VoucherCard from './VoucherCard'
+import DatePicker from '@/components/DatePicker'
+import TimePicker from '@/components/TimePicker'
+import {convertToISOString} from '@/helper'
 export default {
   components: {
     VoucherCard,
+    DatePicker,
+    TimePicker,
   },
   props: {
     isOpen: {
@@ -83,6 +99,8 @@ export default {
   data() {
     return {
       valid: true,
+      endDate: new Date().toISOString().substr(0, 10),
+      endTime: null,
       voucher: {
         name: null,
         description: null,
@@ -105,10 +123,16 @@ export default {
     async createVoucher() {
       try {
         if (this.$refs.form.validate()) {
-          await this.$store.dispatch('vouchers/createStoreVoucher', this.voucher)
+          await this.$store.dispatch(
+            'vouchers/createStoreVoucher',
+            {
+            ...this.voucher,
+            expireDate:convertToISOString(`${this.endDate} ${this.endTime}`)
+            }
+          )
           this.$refs.form.reset()
           this.closeModal()
-        }else{
+        } else {
           return
         }
       } catch (error) {

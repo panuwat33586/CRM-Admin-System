@@ -32,7 +32,7 @@ export default {
       searchConditionList:[
         {text:'member',value:'member.firstName'},
         {text:'receipt Id',value:'receiptId'},
-        {text:'Points',value:'points'}
+        {text:'mobile',value:'member.mobile'}
       ]
     }
   },

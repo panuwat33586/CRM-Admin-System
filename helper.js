@@ -1,5 +1,7 @@
 import { storage } from './firebaseInstance'
 import dayjs from 'dayjs'
+import relativeTime from 'dayjs/plugin/relativeTime'
+dayjs.extend(relativeTime)
 
 const storageRef = storage.ref()
 
@@ -7,8 +9,34 @@ const genId = () => {
     return Math.random().toString(16).slice(2)
 }
 
-const convertDateFormat=(date)=>{
-    return dayjs(date).format('YYYY/MM/DD HH:mm:ss')
+const convertDateFormat=(date,format)=>{
+    return dayjs(date).format(format)
+}
+
+
+const dateDiffDuration=(date)=>{
+    const today=dayjs()
+    if(!date){
+        date=0
+    }
+    date=dayjs(date)
+    return today.from(date,true)
+}
+const convertToISOString=(date)=>{
+    return dayjs(date).toISOString()
+}
+const genTransactionByDateInfo=(data)=>{
+    const result=[]
+    const dayInMonth=dayjs().daysInMonth()
+    for(let i=1;i<=dayInMonth;i++){
+        let day=dayjs().set('date',i).format('DD/MM/YYYY')
+        if(data[day]){
+            result.push([day,data[day].quantity])
+        }else{
+             result.push([day,0])
+        }
+    }
+    return result
 }
 
 const uploadImage =(storeId,image,id,type) => {
@@ -40,4 +68,12 @@ const deleteImage =(storeId,id,type)=>{
 }
 
 
-export { genId, uploadImage,deleteImage, convertDateFormat}
+export { 
+    genId, 
+    uploadImage,
+    deleteImage, 
+    convertDateFormat,
+    dateDiffDuration,
+    genTransactionByDateInfo,
+    convertToISOString
+}

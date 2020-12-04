@@ -15,12 +15,19 @@
         <v-list-item-action>
           <v-row>
             <v-col>
-              <v-btn 
-              @click="deleteNews"
-              text> delete </v-btn>
+              <span @click="triggerEditNewsModal"> 
+                <v-icon>
+                 mdi-file-edit
+                </v-icon>
+                </span>
             </v-col>
             <v-col>
-              <v-btn @click="triggerEditNewsModal" text> edit </v-btn>
+              <span @click="deleteNews" text> 
+                <v-icon 
+                color="red">
+                  mdi-delete
+                </v-icon>
+                </span>
             </v-col>
           </v-row>
         </v-list-item-action>
