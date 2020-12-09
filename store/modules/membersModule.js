@@ -76,7 +76,7 @@ export const membersModule = ({
       })
       return promise
     },
-    searchMember({state, commit }, { searchCondition, searchWord }) {
+    searchMember({state,commit}, { searchCondition, searchWord }) {
       let searchResult;
       if(!Boolean(searchWord)||searchWord.length<3||!searchWord.trim()){
         return

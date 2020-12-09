@@ -54,13 +54,12 @@ import Member from '@/components/members/Member'
 import Searchbar from '@/components/Searchbar'
 import MemberPersonalInfo from '@/components/members/MemberPersonalInfo'
 import MemberVoucherInfo from '@/components/members/MemberVoucherInfo'
-import Pagination from '@/components/Pagination'
 export default {
   components: {
     Member,
     Searchbar,
     MemberPersonalInfo,
-    MemberVoucherInfo,
+    MemberVoucherInfo
   },
   data(){
      return {
