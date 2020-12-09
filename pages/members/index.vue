@@ -24,7 +24,7 @@
           type="list-item-avatar-three-line"
           :loading="skeletonLoader"
           >
-          <template v-for="(member, $memberIndex) in members.memberList">
+          <template v-for="(member, $memberIndex) in members.searchMemberList">
             <Member 
             :member="member" 
             :key="'members' + $memberIndex" 
@@ -54,6 +54,7 @@ import Member from '@/components/members/Member'
 import Searchbar from '@/components/Searchbar'
 import MemberPersonalInfo from '@/components/members/MemberPersonalInfo'
 import MemberVoucherInfo from '@/components/members/MemberVoucherInfo'
+import Pagination from '@/components/Pagination'
 export default {
   components: {
     Member,
@@ -65,9 +66,8 @@ export default {
      return {
        tab:null,
        searchConditionList:[
-         {text:'Name',value:'firstName'},
-         {text:'Mobile',value:'mobile'},
-         {text:'Points',value:'points'}
+         {text:'Name',value:'name'},
+         {text:'Mobile',value:'mobile'}
        ]
      }
   },

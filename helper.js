@@ -5,6 +5,13 @@ dayjs.extend(relativeTime)
 
 const storageRef = storage.ref()
 
+const saveStatePlugin= (store)=> {
+    store.subscribe(
+      (mutation, state) => localStorage.setItem('adminInfo', JSON.stringify(state.admin.adminInfo))
+    )
+  }
+
+
 const genId = () => {
     return Math.random().toString(16).slice(2)
 }
@@ -75,5 +82,6 @@ export {
     convertDateFormat,
     dateDiffDuration,
     genTransactionByDateInfo,
-    convertToISOString
+    convertToISOString,
+    saveStatePlugin
 }

@@ -2,11 +2,15 @@ import { firestore } from '@/firebaseInstance'
 export const transactionsModule = ({
   namespaced: true,
   state: {
+    searchTransactionList:[],
     transactionsList: []
   },
   mutations: {
     setTransactionsList(state, list) {
       state.transactionsList = list
+    },
+    setSearchTransactionList(state,list){
+      state.searchTransactionList=list
     }
   },
   getters: {
@@ -27,25 +31,34 @@ export const transactionsModule = ({
           .get()
         const list = docs.map(doc => doc.data())
         commit('setTransactionsList', list)
+        commit('setSearchTransactionList',list)
       } catch (error) {
         console.log(error)
       }
     },
-    async searchTransaction({ rootState, commit }, { searchCondition, searchWord }) {
-      try {
-        const { adminInfo } = rootState.admin
-        if (searchCondition == 'points') {
-          searchWord = parseInt(searchWord)
-        }
-        const { docs } = await firestore.collection('transactions')
-          .where('storeId', '==', adminInfo.storeId)
-          .where(searchCondition, '==', searchWord)
-          .get()
-        const list = docs.map(doc => doc.data())
-        commit('setTransactionsList', list)
-      } catch (error) {
-        console.log(error)
+    searchTransaction({ state, commit }, { searchCondition, searchWord }) {
+      let searchResult;
+      if(!Boolean(searchWord)||searchWord.length<3||!searchWord.trim()){
+        return
+      }else{
+        const check=(checkValue)=>{
+          return _.includes(checkValue,searchWord.toUpperCase())
+        }   
+        searchResult=_.filter(state.transactionsList,
+          (transaction)=>{
+            let compare;
+            if(searchCondition=='name'){
+              const {member}=transaction
+              compare=check(member.firstName)||check(member.lastName)
+            }else{
+              compare=check(_.get(transaction,searchCondition))
+            }
+            if(compare){
+              return transaction
+            }
+          })  
       }
+      commit('setSearchTransactionList',searchResult)
     },
   }
 })

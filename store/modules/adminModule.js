@@ -1,9 +1,10 @@
 import {firebaseAuth,firestore} from '../../firebaseInstance'
 
+const adminInfo = JSON.parse(localStorage.getItem('adminInfo')) || null
 export const adminModule=({
     namespaced:true,
     state:{
-       adminInfo:null
+       adminInfo
     },
     mutations:{
         setAdminInfo(state,info){
@@ -11,6 +12,7 @@ export const adminModule=({
         },
         clearAdminInfo(state){
             state.adminInfo=null
+            localStorage.removeItem('adminInfo')
         }
     },
     actions:{

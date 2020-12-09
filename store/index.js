@@ -1,4 +1,5 @@
 import Vuex from 'vuex'
+import {saveStatePlugin} from '@/helper'
 import {appModule} from './modules/appModule.js'
 import { adminModule } from './modules/adminModule.js'
 import { storeModule } from './modules/storeModule.js'
@@ -8,6 +9,7 @@ import {transactionsModule} from './modules/transactionsModule'
 
 const store=()=>{
   return new Vuex.Store({
+    plugins:[saveStatePlugin],
     modules:{
       app:appModule,
       admin:adminModule,

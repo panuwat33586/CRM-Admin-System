@@ -1,15 +1,19 @@
 import { firestore } from '@/firebaseInstance'
+import _ from 'lodash'
 export const membersModule = ({
   namespaced: true,
   state: {
     memberList: [],
+    searchMemberList:[],
     selectedMember: null,
     selectedMemberVoucherList: [],
-    docs:null
   },
   mutations: {
     setMemberList(state, list) {
       state.memberList = list
+    },
+    setSearchMemberList(state,list){
+       state.searchMemberList=list
     },
     setSelectedMember(state, memberInfo) {
       state.selectedMember = memberInfo
@@ -17,9 +21,6 @@ export const membersModule = ({
     setSelectedMemberVoucherList(state, list) {
       state.selectedMemberVoucherList = list
     },
-    setDocs(state,docs){
-      state.docs=docs
-    }
   },
   getters:{
        filterMemberList:(state)=>(type)=>{
@@ -36,50 +37,15 @@ export const membersModule = ({
         const { docs } = await firestore.collection('members')
           .orderBy('createAt','desc')
           .where('storeId', '==', adminInfo.storeId)
-          .limit(20)
           .get()
         const list = docs.map(doc => doc.data())
         commit('setMemberList', list)
-        commit('setDocs',docs)
+        commit('setSearchMemberList', list)
         commit('app/setSkeletonLoader',false,{root:true})
       } catch (error) {
         console.log(error)
       }
     },
-    async fetchNextMemberList({rootState,state,commit}){
-       try{
-        const { adminInfo } = rootState.admin
-        const lastDoc=state.docs[state.docs.length-1] 
-        const { docs } = await firestore.collection('members')
-        .where('storeId', '==', adminInfo.storeId)
-        .orderBy('createAt','desc')
-        .startAfter(lastDoc)
-        .limit(20)
-        .get()
-        const list = docs.map(doc => doc.data())
-        commit('setMemberList', list)
-        commit('setDocs',docs)
-       }catch(error){
-           console.log(error)
-       }
-    },
-    async fetchPrevMemberList({rootState,state,commit}){
-      try{
-       const { adminInfo } = rootState.admin
-       const lastDoc=state.docs[0] 
-       const { docs } = await firestore.collection('members')
-       .where('storeId', '==', adminInfo.storeId)
-       .orderBy('createAt','desc')
-       .endBefore(lastDoc)
-       .limit(20)
-       .get()
-       const list = docs.map(doc => doc.data())
-       commit('setMemberList', list)
-       commit('setDocs',docs)
-      }catch(error){
-          console.log(error)
-      }
-   },
     async fetchSelectedMemberInfo({ dispatch,commit }, member) {
       try {
         const { storeId, memberId } = member
@@ -110,21 +76,29 @@ export const membersModule = ({
       })
       return promise
     },
-    async searchMember({ rootState, commit }, { searchCondition, searchWord }) {
-      try {
-        const { adminInfo } = rootState.admin
-        if (searchCondition == 'points') {
-          searchWord = parseInt(searchWord)
-        }
-        const { docs } = await firestore.collection('members')
-          .where('storeId', '==', adminInfo.storeId)
-          .where(searchCondition, '==', searchWord)
-          .get()
-        const list = docs.map(doc => doc.data())
-        commit('setMemberList', list)
-      } catch (error) {
-        console.log(error)
+    searchMember({state, commit }, { searchCondition, searchWord }) {
+      let searchResult;
+      if(!Boolean(searchWord)||searchWord.length<3||!searchWord.trim()){
+        return
+      }else{
+        const check=(checkValue)=>{
+          return _.includes(checkValue,searchWord.toUpperCase())
+        }   
+        searchResult=_.filter(state.memberList,
+            (member)=>{
+              let compare;
+              if(searchCondition=='name'){
+                const {firstName,lastName}=member
+                compare=check(firstName)||check(lastName)
+              }else{
+                compare=check(member[`${searchCondition}`])
+              }
+              if(compare){
+                return member
+              }
+            })
       }
+      commit('setSearchMemberList',searchResult)
     },
     editMember({ commit, dispatch }, newMemberInfo) {
       const promise = new Promise(async (resolve, reject) => {

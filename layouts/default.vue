@@ -1,10 +1,10 @@
 <template>
   <v-app>
     <v-app-bar 
-    :color="store.storeInfo?store.storeInfo.setting.bannerColor:'#FFCC80'" 
+    color="indigo"
     dark 
     app>
-      <v-toolbar-title>{{store.storeInfo?store.storeInfo.name:null}}</v-toolbar-title>
+      <v-toolbar-title>CRM-SYSTEM</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn  @click="signout" text>Signout</v-btn>
     </v-app-bar>

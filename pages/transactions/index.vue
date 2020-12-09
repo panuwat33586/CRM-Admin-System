@@ -6,7 +6,7 @@
       </v-card-title>
       <v-card-text>
         <Searchbar :searchConditionList="searchConditionList" @onSearch="searchTransaction"/>
-        <TransactionsTable :transactionList="transactions.transactionsList"/>
+        <TransactionsTable :transactionList="transactions.searchTransactionList"/>
       </v-card-text>
     </v-card>
   </div>
@@ -30,7 +30,7 @@ export default {
   data(){
     return{
       searchConditionList:[
-        {text:'member',value:'member.firstName'},
+        {text:'name',value:'name'},
         {text:'receipt Id',value:'receiptId'},
         {text:'mobile',value:'member.mobile'}
       ]

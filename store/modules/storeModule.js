@@ -33,11 +33,15 @@ export const storeModule = ({
              console.log(error)
          }
       },
-      async editStoreInfo({rootState,commit},newInfo){
+      async editStoreSetting({rootState,commit,dispatch},setting){
           try{
+            commit('app/setLoading',true,{root:true})
             const {adminInfo}=rootState.admin
-            await firestore.collection('stores').doc(adminInfo.storeId).update({newInfo})
-            commit('setStoreInfo',newInfo)
+            await firestore.collection('stores')
+            .doc(adminInfo.storeId)
+            .update({setting})
+            dispatch('fetchStoreInfo')
+            commit('app/setLoading',false,{root:true})
           }catch(error){
              console.log(error)
           }

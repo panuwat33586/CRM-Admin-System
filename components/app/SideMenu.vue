@@ -39,19 +39,36 @@ export default {
   data() {
     return {
       menus: [
-        { icon: 'mdi-storefront', title: 'Store', page: 'store' },
-        { icon: 'mdi-account-group', title: 'Members', page: 'members' },
+        { 
+        icon: 'mdi-storefront', 
+        title: 'Store', 
+        page: 'store' 
+        },
+        { 
+          icon: 'mdi-account-group',
+          title: 'Members', 
+          page: 'members' 
+        },
         {
           icon: 'mdi-cash-multiple',
           title: 'Transactions',
           page: 'transactions',
         },
-        { icon: 'mdi-ticket-percent', title: 'Vouchers', page: 'vouchers' },
+        { 
+          icon: 'mdi-ticket-percent', 
+          title: 'Vouchers', 
+          page: 'vouchers' 
+          },
         {
           icon: 'mdi-file-document-outline',
           title: 'Reports',
           page: 'reports',
         },
+        {
+          icon:'mdi-cog',
+          title:'Setting',
+          page:'setting'
+        }
       ],
       selectedMenu:0
     }

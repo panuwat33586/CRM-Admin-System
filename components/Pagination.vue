@@ -1,12 +1,34 @@
 <template>
   <div class="text-center">
-    <v-pagination
-      v-model="page"
-      :length="pageLength"
-      :total-visible="1"
-      @next="next"
-      @previous="previous"
-    ></v-pagination>
+    <v-row
+    align="center"
+    >
+      <v-col
+      >
+       <v-btn
+       :disabled="page==1?true:false"
+       class="float-right"
+       x-small
+       outlined
+       fab
+       >
+       <v-icon>mdi-chevron-left</v-icon>
+       </v-btn>
+      </v-col>
+      <v-col>
+      <span>{{page}}</span>
+      </v-col>
+      <v-col>
+       <v-btn
+       class="float-left"
+       x-small
+       outlined
+       fab
+       >
+       <v-icon>mdi-chevron-right</v-icon>
+       </v-btn>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -30,6 +52,16 @@ export default {
            type:Function,
            required:true
          }
+     },
+     methods:{
+       nextPage(){
+              this.next()
+              this.page+=1
+       },
+       prevPage(){
+              this.previous()
+              this.page-=1
+       }
      }
 }
 </script>
