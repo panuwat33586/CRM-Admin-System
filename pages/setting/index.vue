@@ -77,6 +77,7 @@ import { mapState } from 'vuex'
 import CrmAppPreview from '@/components/setting/CrmAppPreview'
 import ColorPickerInput from '@/components/setting/ColorPickerInput'
 export default {
+  middleware:'routesGuard',
   components: {
     CrmAppPreview,
     ColorPickerInput,

@@ -7,6 +7,10 @@
     <template v-slot:[`item.member`]="{ item }">
       {{item.member.firstName}} {{item.member.lastName}}
     </template>
+    <template v-slot:[`item.type`]="{ item }">
+      <span 
+      :class="checkTransactionType(item.type)?'gain':'used'">{{item.type}}</span>
+    </template>
     <template v-slot:[`item.timestamp`]="{ item }">
       {{ dateFormat(item.timestamp) }}
     </template>
@@ -61,9 +65,21 @@ export default {
     dateFormat(date) {
       return convertDateFormat(date,'YYYY/MM/DD HH:mm:ss')
     },
+    checkTransactionType(type){
+      if(type=='gain'){
+        return true
+      }
+      return false
+    }
   },
 }
 </script>
 
 <style>
+.gain{
+  color:green
+}
+.used{
+  color:red
+}
 </style>

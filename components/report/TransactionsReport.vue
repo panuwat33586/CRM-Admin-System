@@ -7,6 +7,7 @@
       <v-col cols="10">
         <v-select
           label="select"
+          v-model="selectType"
           @change="selectSortType"
           :items="sortTypes"
           outlined

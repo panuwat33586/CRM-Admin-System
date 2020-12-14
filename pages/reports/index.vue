@@ -39,6 +39,7 @@ import MembersReport from '@/components/report/MembersReport'
 import TransactionsReport from '@/components/report/TransactionsReport'
 import VouchersReport from '@/components/report/VouchersReport'
 export default {
+    middleware:'routesGuard',
     components:{
         MembersReport,
         TransactionsReport,

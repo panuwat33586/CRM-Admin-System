@@ -100,14 +100,20 @@ export const membersModule = ({
       }
       commit('setSearchMemberList',searchResult)
     },
-    editMember({ commit, dispatch }, newMemberInfo) {
+    editMember({ commit, dispatch }, memberInfo) {
       const promise = new Promise(async (resolve, reject) => {
         try {
           commit('app/setLoading', true, { root: true })
-          const { memberId, storeId } = newMemberInfo
+          const { memberId, storeId,firstName,lastName } = memberInfo
           await firestore.collection('members')
-            .doc(`${storeId}#${memberId}`).set(newMemberInfo)
-          dispatch('fetchMemberList')
+            .doc(`${storeId}#${memberId}`).set(
+              {
+                ...memberInfo,
+                firstName:firstName.toUpperCase(),
+                lastName:lastName.toUpperCase()
+              }
+              )
+          dispatch('fetchSelectedMemberInfo',memberInfo)
           commit('app/setLoading', false, { root: true })
           resolve()
         } catch (error) {

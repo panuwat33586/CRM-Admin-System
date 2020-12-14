@@ -37,6 +37,7 @@ import StoreDetail from '@/components/store/StoreDetail'
 import NewsCreateModal from '@/components/store/NewsCreateModal'
 import NewsListItem from '@/components/store/NewsListItem'
 export default {
+  middleware:'routesGuard',
   components: {
     StoreDetail,
     NewsListItem,

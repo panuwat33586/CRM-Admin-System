@@ -1,45 +1,21 @@
 <template>
   <div class="text-center">
-    <v-row
-    align="center"
-    >
-      <v-col
-      >
-       <v-btn
-       :disabled="page==1?true:false"
-       class="float-right"
-       x-small
-       outlined
-       fab
-       >
-       <v-icon>mdi-chevron-left</v-icon>
-       </v-btn>
-      </v-col>
-      <v-col>
-      <span>{{page}}</span>
-      </v-col>
-      <v-col>
-       <v-btn
-       class="float-left"
-       x-small
-       outlined
-       fab
-       >
-       <v-icon>mdi-chevron-right</v-icon>
-       </v-btn>
-      </v-col>
-    </v-row>
+    <v-pagination
+      :value="page"
+      :length="pageLength"
+      @next="nextPage"
+      @previous="prevPage"
+    ></v-pagination>
   </div>
 </template>
 
 <script>
 export default {
-     data(){
-         return{
-             page:1
-         }
-     },
      props:{
+         page:{
+            type:Number,
+            required:true
+         },
          pageLength:{
              type:Number,
              required:true
@@ -56,11 +32,9 @@ export default {
      methods:{
        nextPage(){
               this.next()
-              this.page+=1
        },
        prevPage(){
               this.previous()
-              this.page-=1
        }
      }
 }

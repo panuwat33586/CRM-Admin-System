@@ -35,7 +35,6 @@ export default {
   modules: [
     '@nuxtjs/axios'
   ],
-
   // Axios module configuration (https://go.nuxtjs.dev/config-axios)
   axios: {},
   // Vuetify module configuration (https://go.nuxtjs.dev/config-vuetify)

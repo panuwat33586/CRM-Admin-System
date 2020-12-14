@@ -7,6 +7,7 @@
       <v-col cols="10">
         <v-select
           label="select"
+          v-model="selectType"
           @change="selectSortType"
           :items="sortTypes"
           outlined
@@ -15,23 +16,23 @@
         />
       </v-col>
     </v-row>
-    <MemberVoucherTable :voucherList="voucherList" />
+    <VouchersReportTable :voucherList="voucherList"/>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import MemberVoucherTable from '@/components/members/MemberVoucherTable'
+import VouchersReportTable from './VouchersReportTable'
 export default {
   components: {
-    MemberVoucherTable,
+    VouchersReportTable,
   },
   data() {
     return {
-      selectType: 'createAt',
+      selectType: 'expireDate',
       sortTypes: [
-        { text: 'create at', value: 'createAt' },
         { text: 'expire date', value: 'expireDate' },
+        { text: 'quantity', value: 'quantity' },
       ],
     }
   },
@@ -40,7 +41,7 @@ export default {
   },
   computed: {
     voucherList() {
-      return this.$store.getters['vouchers/filteredMembersVoucherList'](this.selectType)
+      return this.$store.getters['vouchers/sortedMembersVoucherList'](this.selectType)
     },
   },
     methods:{

@@ -21,8 +21,10 @@
         </template>
          <v-color-picker 
               :value="color"
-              dot-size="25"
-              swatches-max-height="200" 
+              hide-canvas
+              hide-inputs
+              show-swatches
+              swatches-max-height="100" 
               @input="(color)=>$emit('update:color',color)"
               />
       </v-menu>

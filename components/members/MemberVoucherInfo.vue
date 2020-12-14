@@ -9,6 +9,7 @@
               <th class="text-left">Name</th>
               <th class="text-left">Voucher Id</th>
               <th class="text-left">Status</th>
+               <th class="text-left">expire on</th>
               <th class="text-left">Action</th>
             </tr>
           </thead>
@@ -20,9 +21,14 @@
               <td>{{ voucher.voucherDetail.name }}</td>
               <td>{{ voucher.memberVoucherId }}</td>
               <td>{{ voucher.status }}</td>
+              <td>{{ dateFormat(voucher.expireDate) }}</td>
               <td>
                 <span @click="deleteVoucher(voucher)"> 
-                  <v-icon> mdi-delete </v-icon>
+                  <v-icon 
+                  color="red"
+                  > 
+                    mdi-delete 
+                    </v-icon>
                 </span>
               </td>
             </tr>
@@ -34,6 +40,7 @@
 </template>
 
 <script>
+import { convertDateFormat } from '@/helper'
 export default {
   props: {
     voucherList: {
@@ -44,7 +51,10 @@ export default {
   methods:{
     deleteVoucher(voucher){
           this.$store.dispatch('members/deleteMemberVoucher',voucher)
-    }
+    },
+    dateFormat(date) {
+      return convertDateFormat(date, 'YYYY/MM/DD HH:mm:ss')
+    },
   }
 }
 </script>

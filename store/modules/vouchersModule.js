@@ -12,14 +12,28 @@ export const vouchersModule = ({
       state.storeVoucherList = list
     },
     setMembersVoucherList(state,list){
-      state.membersVoucherList=list
+      const voucherList=list.reduce((acc,voucher)=>{
+        if(!acc[voucher.voucherDetail.storeVoucherId]){
+          const initVoucher=
+          {
+            id:voucher.voucherDetail.storeVoucherId,
+            name:voucher.voucherDetail.name,
+            expireDate:voucher.expireDate,
+            quantity:0
+          }
+          acc[voucher.voucherDetail.storeVoucherId]=initVoucher
+        }
+        acc[voucher.voucherDetail.storeVoucherId].quantity+=1
+        return acc
+      },{})
+       state.membersVoucherList=Object.values(voucherList)
     }
   },
   getters:{
-       filteredMembersVoucherList:(state)=>(type)=>{
-        return state.membersVoucherList.sort((a,b)=>{
-         return  a[type]>b[type]?-1:1
-        })
+       sortedMembersVoucherList:(state)=>(type)=>{
+       return state.membersVoucherList.sort((a,b)=>{
+        return  a[type]>b[type]?-1:1
+       })
   }
   },
   actions: {

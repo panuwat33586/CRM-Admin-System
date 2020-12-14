@@ -9,6 +9,7 @@
      <v-col cols="10">
          <v-select
          label='select'
+         v-model="selectType"
          @change='selectSortType'
          :items="sortTypes"
          outlined
@@ -38,7 +39,7 @@
             <v-list-item-subtitle > {{member.mobile}}</v-list-item-subtitle>
           </v-list-item-content>
           <v-list-item-action v-if="selectType=='lastVisited'">
-            {{duration(member.lastVisited)}}
+            {{lastVisited(member.lastVisited)}}
           </v-list-item-action>
           <v-list-item-action v-else>
             {{member.points}} points
@@ -53,7 +54,7 @@
 
 <script>
 import {mapState} from 'vuex'
-import {dateDiffDuration} from '@/helper'
+import {convertDateFormat} from '@/helper'
 import {todayDiff} from '@/helper'
 export default {
   data(){
@@ -74,8 +75,8 @@ export default {
       }
    },
     methods:{
-         duration(date){
-           return dateDiffDuration(date)
+         lastVisited(date){
+           return convertDateFormat(date,'YYYY/MM/DD HH:mm:ss')
          },
          selectSortType(type){
              this.selectType=type

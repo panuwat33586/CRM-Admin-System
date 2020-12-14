@@ -44,6 +44,7 @@ import {mapState} from 'vuex'
 import CreateVoucherModal from '@/components/vouchers/CreateVoucherModal'
 import VoucherListItem from '@/components/vouchers/VoucherListItem'
 export default {
+  middleware:'routesGuard',
   data() {
     return {
         createVoucherModal:false
