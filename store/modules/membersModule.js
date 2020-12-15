@@ -23,7 +23,7 @@ export const membersModule = ({
     },
   },
   getters:{
-       filterMemberList:(state)=>(type)=>{
+       sortedMemberList:(state)=>(type)=>{
              return state.memberList.sort((a,b)=>{
               return  a[type]>b[type]?-1:1
              })

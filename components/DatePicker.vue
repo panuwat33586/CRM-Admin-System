@@ -1,15 +1,16 @@
 <template>
-  <v-dialog
-    ref="dialog"
-    v-model="modal"
-    :return-value.sync="date"
-    persistent
-    width="290px"
+  <v-menu
+    ref="menu"
+    v-model="menu"
+    :close-on-content-click="false"
+    transition="scale-transition"
+    offset-y
+    min-width="290px"
   >
     <template v-slot:activator="{ on, attrs }">
       <v-text-field
         :value="date"
-        label="Expire Date"
+        :label="label"
         outlined
         dense
         readonly
@@ -17,33 +18,36 @@
         v-on="on"
       ></v-text-field>
     </template>
-    <v-date-picker 
-    :value="date"
-    :min="minDate"
-    @change="(date)=>$emit('update:date',date)"
-    scrollable>
+    <v-date-picker
+      :value="date"
+      @change="(date) => $emit('update:date', date)"
+      no-title
+      scrollable
+    >
       <v-spacer></v-spacer>
-      <v-btn text color="primary" @click="modal = false"> Cancel </v-btn>
-      <v-btn text color="primary" @click="$refs.dialog.save(date)"> OK </v-btn>
+      <v-btn text color="primary" @click="menu = false"> Cancel </v-btn>
+      <v-btn text color="primary" @click="$refs.menu.save(date)"> OK </v-btn>
     </v-date-picker>
-  </v-dialog>
+  </v-menu>
 </template>
 
 <script>
 export default {
   data() {
     return {
-      minDate:new Date().toISOString().substr(0, 10),
-      modal: false,
-    }
+      menu: false,
+    };
   },
-  props:{
-     date:{
-         required:true
-     }
-  }
-}
+  props: {
+    date: {
+      required: true,
+    },
+    label: {
+      type: String,
+      required: true,
+    },
+  },
+};
 </script>
 
-<style>
-</style>
+<style></style>

@@ -1,9 +1,10 @@
 import { firestore } from '@/firebaseInstance'
+import {dateBetweenChecking} from '@/helper'
 export const transactionsModule = ({
   namespaced: true,
   state: {
     searchTransactionList:[],
-    transactionsList: []
+    transactionsList: [],
   },
   mutations: {
     setTransactionsList(state, list) {
@@ -14,8 +15,18 @@ export const transactionsModule = ({
     }
   },
   getters: {
-    filterTransactionsList: (state) => (type) => {
-      return state.transactionsList.sort((a, b) => {
+    filteredTransactionsByDate:(state)=>(startDate,endDate)=>{
+      if(startDate&&endDate){
+        return state.transactionsList.filter(transaction=>{
+          if(dateBetweenChecking(transaction.timestamp,startDate,endDate)){
+            return transaction
+          }
+      })
+      }
+      return state.transactionsList
+    },
+    sortedTransactionsList: (state,getters) => (startDate,endDate,type) => {
+      return getters.filteredTransactionsByDate(startDate,endDate).sort((a, b) => {
         return a[type] > b[type] ? -1 : 1
       })
     }

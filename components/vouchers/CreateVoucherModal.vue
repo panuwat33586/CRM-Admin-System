@@ -44,7 +44,7 @@
               />
             </v-col>
             <v-col cols="6">
-              <DatePicker
+              <ExpireDatePicker
               :date.sync="endDate"
               />
             </v-col>
@@ -81,13 +81,13 @@
 
 <script>
 import VoucherCard from './VoucherCard'
-import DatePicker from '@/components/DatePicker'
+import ExpireDatePicker from './ExpireDatePicker'
 import TimePicker from '@/components/TimePicker'
 import {convertToISOString} from '@/helper'
 export default {
   components: {
     VoucherCard,
-    DatePicker,
+    ExpireDatePicker,
     TimePicker,
   },
   props: {

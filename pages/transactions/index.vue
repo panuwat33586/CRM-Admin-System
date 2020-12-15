@@ -48,7 +48,7 @@ export default {
   data(){
     return{
       page:1,
-      limit:3,
+      limit:20,
       searchConditionList:[
         {text:'name',value:'name'},
         {text:'receipt Id',value:'receiptId'},

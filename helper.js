@@ -1,7 +1,9 @@
 import { storage } from './firebaseInstance'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import isBetween from 'dayjs/plugin/isBetween'
 dayjs.extend(relativeTime)
+dayjs.extend(isBetween)
 
 const storageRef = storage.ref()
 
@@ -19,7 +21,9 @@ const genId = () => {
 const convertDateFormat=(date,format)=>{
     return dayjs(date).format(format)
 }
-
+const dateBetweenChecking=(date,startDate,endDate)=>{
+    return  dayjs(date).isBetween(startDate,endDate,'date','[]')
+}
 
 const dateDiffDuration=(date)=>{
     const today=dayjs()
@@ -81,6 +85,7 @@ export {
     deleteImage, 
     convertDateFormat,
     dateDiffDuration,
+    dateBetweenChecking,
     genTransactionByDateInfo,
     convertToISOString,
     saveStatePlugin
