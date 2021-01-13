@@ -4,6 +4,7 @@
   :value="isOpen" 
   @input="closeModal">
     <v-card @click:outside="closeModal">
+      <v-card-title class="headline grey lighten-2"> News</v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid" lazy-validation>
           <v-text-field

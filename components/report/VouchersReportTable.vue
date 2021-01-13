@@ -1,10 +1,13 @@
 <template>
   <v-data-table 
   :headers="headers" 
-  :items="voucherList" 
+  :items="voucherList"
   :hide-default-footer="true">
-    <template v-slot:[`item.expireDate`]="{ item }">
-      {{ dateFormat(item.expireDate) }}
+  <template v-slot:[`item.member`]="{ item }">
+        {{`${item.member.firstName} ${item.member.lastName}` }}
+  </template>
+    <template v-slot:[`item.usedDate`]="{ item }">
+      {{ dateFormat(item.usedDate) }}
     </template>
   </v-data-table>
 </template>
@@ -16,23 +19,23 @@ export default {
     return {
       headers: [
         {
-          text: "id",
-          value: "id",
+          text: "member",
+          value: "member",
           sortable: false,
         },
         {
-          text: "name",
-          value: "name",
+          text: "voucher",
+          value: "voucherDetail.name",
           sortable: false,
         },
         {
-          text: "quantity",
-          value: "quantity",
+          text: "remaining points",
+          value: "remainingPoints",
           sortable: false,
         },
         {
-          text: "expire on",
-          value: "expireDate",
+          text: "used date",
+          value: "usedDate",
           sortable: false,
         },
       ],
@@ -45,8 +48,8 @@ export default {
   },
   methods: {
     dateFormat(date) {
-      return convertDateFormat(date, "YYYY/MM/DD");
-    },
+      return convertDateFormat(date, "YYYY/MM/DD HH:mm:ss");
+    }
   },
 };
 </script>

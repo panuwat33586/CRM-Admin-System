@@ -33,10 +33,10 @@ export const membersModule = ({
     async fetchMemberList({ rootState, commit }) {
       try {
         commit('app/setSkeletonLoader',true,{root:true})
-        const { adminInfo } = rootState.admin
+        const { storeId } = rootState.admin.adminInfo
         const { docs } = await firestore.collection('members')
           .orderBy('createAt','desc')
-          .where('storeId', '==', adminInfo.storeId)
+          .where('storeId', '==', storeId)
           .get()
         const list = docs.map(doc => doc.data())
         commit('setMemberList', list)

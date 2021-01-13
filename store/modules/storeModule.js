@@ -24,8 +24,8 @@ export const storeModule = ({
       async fetchStoreInfo({rootState,commit}){
          try{
             commit('app/setSkeletonLoader',true,{root:true})
-            const {adminInfo}=rootState.admin
-            const result=await firestore.collection('stores').doc(adminInfo.storeId).get()
+            const {storeId}=rootState.admin.adminInfo
+            const result=await firestore.collection('stores').doc(storeId).get()
             const info=result.data()
             commit('setStoreInfo',info)
             commit('app/setSkeletonLoader',false,{root:true})
@@ -48,9 +48,9 @@ export const storeModule = ({
       },
       async fetchStoreNews({rootState,commit}){
           try{
-            const {adminInfo}=rootState.admin
+            const {storeId}=rootState.admin.adminInfo
              const {docs}=await firestore.collection('news')
-             .where('storeId','==',adminInfo.storeId)
+             .where('storeId','==',storeId)
              .get()
              const newsList=docs.map(doc=>doc.data())
             commit('setNewsList',newsList)
@@ -61,13 +61,13 @@ export const storeModule = ({
       createStoreNews({rootState},{newsImage,header,description}){
           const promise=new Promise(async(resolve,reject)=>{
             try{
-                const {adminInfo}=rootState.admin
+                const {storeId}=rootState.admin.adminInfo
                 const newsId=genId()
-                const imageUrl= await uploadImage(adminInfo.storeId,newsImage,newsId,'news')
+                const imageUrl= await uploadImage(storeId,newsImage,newsId,'news')
                 await firestore.collection('news')
-                .doc(`${adminInfo.storeId}#${newsId}`)
+                .doc(`${storeId}#${newsId}`)
                 .set({
-                storeId:adminInfo.storeId,
+                storeId,
                 newsId,
                 header,
                 description,
@@ -83,9 +83,9 @@ export const storeModule = ({
       },
       async deleteStoreNews({rootState,commit},{newsId}){
         try{
-           const {adminInfo}=rootState.admin
-           await deleteImage(adminInfo.storeId,newsId,'news')
-           await firestore.collection('news').doc(`${adminInfo.storeId}#${newsId}`).delete()
+           const {storeId}=rootState.admin.adminInfo
+           await deleteImage(storeId,newsId,'news')
+           await firestore.collection('news').doc(`${storeId}#${newsId}`).delete()
            commit('deleteNews',newsId)
         }catch(error){
            console.log(error)

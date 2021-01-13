@@ -1,10 +1,13 @@
 <template>
   <div>
     <v-row>
-      <v-col cols="2">
-        <v-subheader> Sort by </v-subheader>
+      <v-col cols="3">
+        <DatePicker :date.sync="startDate" label="start date" />
       </v-col>
-      <v-col cols="10">
+      <v-col cols="3">
+        <DatePicker :date.sync="endDate" label="end date" />
+      </v-col>
+      <v-col cols="3">
         <v-select
           label="select"
           v-model="selectType"
@@ -29,10 +32,12 @@ export default {
   },
   data() {
     return {
-      selectType: 'expireDate',
+      startDate:null,
+      endDate:null,
+      selectType: 'usedDate',
       sortTypes: [
-        { text: 'expire date', value: 'expireDate' },
-        { text: 'quantity', value: 'quantity' },
+        { text: 'used date', value: 'usedDate' },
+        { text: 'remaining points', value: 'remainingPoints' },
       ],
     }
   },
@@ -41,7 +46,8 @@ export default {
   },
   computed: {
     voucherList() {
-      return this.$store.getters['vouchers/sortedMembersVoucherList'](this.selectType)
+      return this.$store.getters['vouchers/sortedMembersVoucherList']
+      (this.startDate,this.endDate,this.selectType)
     },
   },
     methods:{

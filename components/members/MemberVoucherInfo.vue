@@ -20,7 +20,7 @@
             >
               <td>{{ voucher.voucherDetail.name }}</td>
               <td>{{ voucher.memberVoucherId }}</td>
-              <td>{{ voucher.status }}</td>
+              <td :class="checkStatus(voucher.status)?'active':'used'">{{ voucher.status }}</td>
               <td>{{ dateFormat(voucher.expireDate) }}</td>
               <td>
                 <span @click="deleteVoucher(voucher)"> 
@@ -55,9 +55,21 @@ export default {
     dateFormat(date) {
       return convertDateFormat(date, 'YYYY/MM/DD HH:mm:ss')
     },
+    checkStatus(status){
+      if(status=='active'){
+        return true
+      }
+       return false
+    }
   }
 }
 </script>
 
 <style>
+.active{
+  color:green
+}
+.used{
+  color:red
+}
 </style>

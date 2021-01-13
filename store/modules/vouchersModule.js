@@ -1,4 +1,4 @@
-import { genId } from '@/helper'
+import { genId,dateBetweenChecking } from '@/helper'
 import { firestore } from '~/firebaseInstance'
 
 export const vouchersModule = ({
@@ -12,26 +12,22 @@ export const vouchersModule = ({
       state.storeVoucherList = list
     },
     setMembersVoucherList(state,list){
-      const voucherList=list.reduce((acc,voucher)=>{
-        if(!acc[voucher.voucherDetail.storeVoucherId]){
-          const initVoucher=
-          {
-            id:voucher.voucherDetail.storeVoucherId,
-            name:voucher.voucherDetail.name,
-            expireDate:voucher.expireDate,
-            quantity:0
-          }
-          acc[voucher.voucherDetail.storeVoucherId]=initVoucher
-        }
-        acc[voucher.voucherDetail.storeVoucherId].quantity+=1
-        return acc
-      },{})
-       state.membersVoucherList=Object.values(voucherList)
+       state.membersVoucherList=list
     }
   },
   getters:{
-       sortedMembersVoucherList:(state)=>(type)=>{
-       return state.membersVoucherList.sort((a,b)=>{
+    filteredMemberVouchersByDate:(state)=>(startDate,endDate)=>{
+      if(startDate&&endDate){
+        return state.membersVoucherList.filter(voucher=>{
+          if(dateBetweenChecking(voucher.usedDate,startDate,endDate)){
+            return voucher
+          }
+      })
+      }
+      return state.membersVoucherList
+    },
+       sortedMembersVoucherList:(state,getters)=>(startDate,endDate,type)=>{
+       return getters.filteredMemberVouchersByDate(startDate,endDate).sort((a,b)=>{
         return  a[type]>b[type]?-1:1
        })
   }
@@ -54,7 +50,9 @@ export const vouchersModule = ({
         try{
           const { adminInfo } = rootState.admin
           const { docs } = await firestore.collection('memberVouchers')
-          .where('storeId', '==', adminInfo.storeId).get()
+          .where('storeId', '==', adminInfo.storeId)
+          .where('status','!=','active')
+          .get()
           const list=docs.map(doc=>doc.data())
           commit('setMembersVoucherList', list)
         }catch(error){
@@ -65,17 +63,17 @@ export const vouchersModule = ({
       const promise = new Promise(async (resolve, reject) => {
         try {
           commit('app/setLoading', true, { root: true })
-          const { adminInfo } = rootState.admin
+          const { storeId } = rootState.admin.adminInfo
           const storeVoucherId = genId()
           const newVoucher = {
-            storeId: adminInfo.storeId,
+            storeId,
             storeVoucherId,
             ...voucherInfo,
             points: parseInt(voucherInfo.points),
             value: parseInt(voucherInfo.value)
           }
           await firestore.collection('storeVouchers')
-            .doc(`${adminInfo.storeId}#${storeVoucherId}`)
+            .doc(`${storeId}#${storeVoucherId}`)
             .set(newVoucher)
           dispatch('fetchStoreVoucherList')
           commit('app/setLoading', false, { root: true })
@@ -100,9 +98,9 @@ export const vouchersModule = ({
       const promise =new Promise(async(resolve,reject)=>{
         try {
           commit('app/setLoading', true, { root: true })
-          const { adminInfo } = rootState.admin
+          const { storeId } = rootState.admin.adminInfo
           await firestore.collection('storeVouchers')
-            .doc(`${adminInfo.storeId}#${editedVoucher.storeVoucherId}`)
+            .doc(`${storeId}#${editedVoucher.storeVoucherId}`)
             .set({
               ...editedVoucher,
               points: parseInt(editedVoucher.points),
@@ -122,9 +120,9 @@ export const vouchersModule = ({
     async deleteStoreVoucher({ rootState, commit, dispatch }, voucher) {
       try {
         commit('app/setLoading', true, { root: true })
-        const { adminInfo } = rootState.admin
+        const { storeId } = rootState.admin.adminInfo
         await firestore.collection('storeVouchers')
-          .doc(`${adminInfo.storeId}#${voucher.storeVoucherId}`)
+          .doc(`${storeId}#${voucher.storeVoucherId}`)
           .delete()
         dispatch('fetchStoreVoucherList')
         commit('app/setLoading', false, { root: true })

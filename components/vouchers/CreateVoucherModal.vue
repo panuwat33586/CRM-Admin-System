@@ -63,7 +63,8 @@
           </v-col>
           <v-col cols="6">
             <v-color-picker
-              dot-size="25"
+              hide-canvas
+              show-swatches
               swatches-max-height="200"
               v-model="voucher.color"
             ></v-color-picker>
